@@ -6,7 +6,7 @@ from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.common.touch_action import TouchAction
 
-from tests.seecrets import my_App2, E_mail, Password, my_path
+from tests.seecrets import my_App2, E_mail, Password, my_path, my_path_2
 
 value = '//android.widget.ImageView[@content-desc="Account"]'
 desired_cap = {
@@ -16,9 +16,10 @@ desired_cap = {
 }
 
 driver = webdriver.Remote("http://localhost:4723/wd/hub", desired_cap)
+# Время Ожидания показа элементов на экране, чтобы не упал тест при загрузке приложения, например
 driver.implicitly_wait(30)
-
-driver.start_recording_screen()
+# Начало записи
+# driver.start_recording_screen()
 """Авторизация"""
 # Выбор языка
 select_language = driver.find_element(by=AppiumBy.XPATH, value='//*[@bounds="[66,857][529,1325]"]')
@@ -70,18 +71,25 @@ but_5 = driver.find_element(by=AppiumBy.XPATH, value='//android.view.View[@conte
 but_6 = driver.find_element(by=AppiumBy.XPATH, value='//android.view.View[@content-desc="Дальше"]').click()
 driver.wait_activity('but_6', 1)
 
-
+# Скрол страницы
 touch = TouchAction(driver)
 
 for i in range(4):
     touch.long_press(x=798, y=1117).move_to(x=751, y=200).release().perform()
     time.sleep(1)
 
-video_raw = driver.stop_recording_screen()
-video_name = driver.current_activity + time.strftime("%Y_%m_%d_%H%M%S")
-
-filepath = os.path.join(my_path, video_name+".mp4")
-
-with open(filepath, "wb") as f:
-    f.write(base64.b64decode(video_raw))
-
+# # Конец записи видео
+# video_raw = driver.stop_recording_screen()
+# # Название видео
+# video_name = driver.current_activity + time.strftime("%Y_%m_%d_%H%M%S")
+# # Запись сохранение в Директорию
+# filepath = os.path.join(my_path, video_name+".mp4")
+#
+# with open(filepath, "wb") as f:
+#     f.write(base64.b64decode(video_raw))
+# Скриншоты
+ts = time.strftime("%d_%m_%Y_%H%M%S")
+activity_name = driver.current_activity
+filename = activity_name+ts
+time.sleep(3)
+driver.save_screenshot(my_path_2+filename+".png")
