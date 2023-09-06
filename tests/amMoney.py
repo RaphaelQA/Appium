@@ -11,7 +11,7 @@ desired_cap = {
 }
 
 driver = webdriver.Remote("http://localhost:4723/wd/hub", desired_cap)
-driver.implicitly_wait(40)
+driver.implicitly_wait(10)
 
 """Баннеры"""
 first_banner = driver.find_element(by=AppiumBy.XPATH, value='//android.view.View[@content-desc="Ok, next"]')
@@ -28,7 +28,7 @@ forty_button.click()
 
 """Авторизация"""
 # Почта
-Email = driver.find_element(by=AppiumBy.CLASS_NAME, value='android.widget.EditText')
+Email = driver.find_element(by=AppiumBy.XPATH, value="//*[@text='Enter your email']")
 Email.click()
 Email.send_keys(E_mail)
 # Пароль, ищем по тексту, так как Класс-нейм одинаковый
@@ -38,7 +38,21 @@ password.send_keys(Password)
 # Кнопка, посмотреть пароль
 see = driver.find_element(by=AppiumBy.XPATH, value="//*[@bounds='[882,756][1014,888]']")
 see.click()
-driver.wait_activity('see.click()', 5)  # Ожидание поставил, чтобы посмотреть как оно работает
+driver.wait_activity('see.click()', 2)  # Ожидание поставил, чтобы посмотреть как оно работает
 # Кнопка Логин
 login = driver.find_element(by=AppiumBy.XPATH, value='//android.view.View[@content-desc="Login ✌️"]')
 login.click()
+
+"""Главная страница"""
+# Приветственная фраза
+name = driver.find_element(by=AppiumBy.XPATH, value="//*[@bounds='[882,756][1014,888]']").get_attribute("text")
+# driver.wait_activity('name', 2)
+print(name)
+# assert name == "Привет, раф 🌙", "Текст невалиден"
+# meditation = driver.find_element(by=AppiumBy.XPATH,
+#                                  value='//android.view.View[@content-desc="Тета-медитация (утро) 10 минут"]')
+# driver.wait_activity('meditation', 2)
+# print(meditation)
+# assert meditation == "Тета-медитация (утро) 10 минут", "Текст невалиден"
+
+# driver.quit()
